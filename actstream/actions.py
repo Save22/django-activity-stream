@@ -81,6 +81,12 @@ def is_following(user, obj):
         content_type=ContentType.objects.get_for_model(obj)).count())
 
 
+def delete_action(user,verb,target,**kwargs):
+    from actstream.models import Action
+    Action.objects.filter(actor_object_id=user.id,verb=verb,target_object_id=target.pk,
+        target_content_type=ContentType.objects.get_for_model(target) ).delete()
+
+
 def action_handler(verb, **kwargs):
     """
     Handler function to create Action instance upon action signal call.
